@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>东京 & 富士山 6天5夜行程</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --warm: #f0e8d5;
+    --red: #c0392b;
+    --red-light: #e8a89e;
+    --gold: #b8860b;
+    --gold-light: #d4a843;
+    --teal: #2c6e6a;
+    --teal-light: #4a9e99;
+    --muted: #7a6e5f;
+    --border: #d4c9b0;
+    --day1: #8b3a2e;
+    --day2: #2c5f8a;
+    --day3: #2c6e6a;
+    --day4: #5a3e7a;
+    --day5: #3a6b3a;
+    --day6: #8b6914;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Sans SC', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 80px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(192,57,43,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 50%, rgba(44,110,106,0.12) 0%, transparent 60%);
+  }
+
+  .hero-jp {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: var(--gold-light);
+    margin-bottom: 20px;
+    opacity: 0.8;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .hero-sub {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(18px, 3vw, 28px);
+    color: var(--gold-light);
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .hero-meta span {
+    font-size: 13px;
+    color: rgba(245,240,232,0.6);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .hero-meta span strong {
+    color: var(--paper);
+    font-weight: 500;
+  }
+
+  .hero-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 28px auto 0;
+    animation: scaleX 0.8s 0.4s ease both;
+    transform-origin: center;
+  }
+
+  /* Navigation dots */
+  .nav-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px;
+    background: var(--ink);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(245,240,232,0.2);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    text-decoration: none;
+  }
+
+  .nav-dot:hover { background: var(--gold); transform: scale(1.4); }
+  .nav-dot.d1 { background: var(--day1); opacity: 0.7; }
+  .nav-dot.d2 { background: var(--day2); opacity: 0.7; }
+  .nav-dot.d3 { background: var(--day3); opacity: 0.7; }
+  .nav-dot.d4 { background: var(--day4); opacity: 0.7; }
+  .nav-dot.d5 { background: var(--day5); opacity: 0.7; }
+  .nav-dot.d6 { background: var(--day6); opacity: 0.7; }
+
+  /* Main layout */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  /* Day card */
+  .day-card {
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .day-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .day-number {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .day-card:nth-child(1) .day-number { background: var(--day1); }
+  .day-card:nth-child(2) .day-number { background: var(--day2); }
+  .day-card:nth-child(3) .day-number { background: var(--day3); }
+  .day-card:nth-child(4) .day-number { background: var(--day4); }
+  .day-card:nth-child(5) .day-number { background: var(--day5); }
+  .day-card:nth-child(6) .day-number { background: var(--day6); }
+
+  .day-title-wrap h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .day-title-wrap .day-theme {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .day-emoji {
+    margin-left: auto;
+    font-size: 28px;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 24px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 7px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    border: 2px solid var(--paper);
+    box-shadow: 0 0 0 1px var(--border);
+  }
+
+  .day-card:nth-child(1) .timeline-item::before { background: var(--day1); box-shadow: 0 0 0 1px var(--day1); }
+  .day-card:nth-child(2) .timeline-item::before { background: var(--day2); box-shadow: 0 0 0 1px var(--day2); }
+  .day-card:nth-child(3) .timeline-item::before { background: var(--day3); box-shadow: 0 0 0 1px var(--day3); }
+  .day-card:nth-child(4) .timeline-item::before { background: var(--day4); box-shadow: 0 0 0 1px var(--day4); }
+  .day-card:nth-child(5) .timeline-item::before { background: var(--day5); box-shadow: 0 0 0 1px var(--day5); }
+  .day-card:nth-child(6) .timeline-item::before { background: var(--day6); box-shadow: 0 0 0 1px var(--day6); }
+
+  .item-time {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    font-weight: 500;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+  }
+
+  .item-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .item-note {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+
+  .tag-warn { background: #fff3cd; color: #856404; }
+  .tag-tip { background: #d1ecf1; color: #0c5460; }
+  .tag-alt { background: #e8d5f0; color: #5a2d7a; }
+  .tag-food { background: #fde8d8; color: #8b3a0f; }
+
+  /* Plan B box */
+  .planb-box {
+    background: linear-gradient(135deg, #f0e8f8 0%, #e8f0f8 100%);
+    border: 1px solid #c9b8e8;
+    border-left: 3px solid var(--day4);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0 8px;
+  }
+
+  .planb-box .planb-header {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--day4);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .planb-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .planb-option {
+    background: white;
+    border-radius: 6px;
+    padding: 12px 14px;
+    border: 1px solid rgba(90,61,122,0.15);
+  }
+
+  .planb-option h4 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+
+  .planb-option p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .planb-option .opt-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .opt-a { background: #fde8d8; color: #8b3a0f; }
+  .opt-b { background: #d8e8fd; color: #0f3a8b; }
+
+  /* Alert box */
+  .alert-box {
+    background: var(--warm);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 24px 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .alert-box strong { color: var(--ink); }
+
+  /* Tips section */
+  .tips-section {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 40px;
+    margin-top: 60px;
+  }
+
+  .tips-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 28px;
+    color: var(--gold-light);
+  }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .tip-item {
+    border-top: 1px solid rgba(245,240,232,0.15);
+    padding-top: 16px;
+  }
+
+  .tip-item h4 {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .tip-item p {
+    font-size: 13px;
+    color: rgba(245,240,232,0.65);
+    line-height: 1.6;
+  }
+
+  /* Closure warning */
+  .closure-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .closure-item {
+    background: rgba(245,240,232,0.06);
+    border-radius: 6px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .closure-item span:first-child {
+    font-size: 13px;
+    color: rgba(245,240,232,0.8);
+  }
+
+  .closure-item span:last-child {
+    font-size: 11px;
+    background: rgba(192,57,43,0.3);
+    color: var(--red-light);
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 1px;
+  }
+
+  /* Separator */
+  .section-sep {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 48px 0 40px;
+  }
+
+  .section-sep::before,
+  .section-sep::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-sep span {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    white-space: nowrap;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scaleX {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  @media (max-width: 600px) {
+    .planb-options { grid-template-columns: 1fr; }
+    .hero { padding: 60px 24px 40px; }
+    .tips-section { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-jp">東京 · 富士山 · 六日間の旅</div>
+  <h1>Tokyo & Fuji</h1>
+  <div class="hero-sub">6天5夜浪漫情侣行程</div>
+  <div class="hero-meta">
+    <span>✈️ 羽田国际机场出入</span>
+    <span>🏨 五反田三井花园酒店</span>
+    <span>⛰️ 含富士山1晚温泉住宿</span>
+  </div>
+  <div class="hero-divider"></div>
+</div>
+
+<!-- Nav dots -->
+<div class="nav-dots">
+  <a class="nav-dot d1" href="#day1" title="第1天"></a>
+  <a class="nav-dot d2" href="#day2" title="第2天"></a>
+  <a class="nav-dot d3" href="#day3" title="第3天"></a>
+  <a class="nav-dot d4" href="#day4" title="第4天"></a>
+  <a class="nav-dot d5" href="#day5" title="第5天"></a>
+  <a class="nav-dot d6" href="#day6" title="第6天"></a>
+</div>
+
+<div class="container">
+
+  <!-- Day 1 -->
+  <div class="day-card" id="day1">
+    <div class="day-header">
+      <div class="day-number">1</div>
+      <div class="day-title-wrap">
+        <h2>抵达东京 · 五反田入住 · 目黑川漫步</h2>
+        <div class="day-theme">ARRIVAL DAY · 落地即出发</div>
+      </div>
+      <div class="day-emoji">✈️</div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="item-time">12:20</div>
+        <div class="item-title">羽田国际机场落地</div>
+        <div class="item-note">预计12:20落地，入境手续约60-70分钟，13:30左右出关。出关后乘<strong>都营浅草线</strong>直达五反田（约20分钟，¥460）。建议出机场先购买Suica西瓜卡。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">15:00</div>
+        <div class="item-title">三井花园酒店五反田 <span class="tag tag-tip">办理入住</span></div>
+        <div class="item-note">酒店自带屋顶温泉，评价极高！放下行李稍作休息。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">16:30</div>
+        <div class="item-title">目黑川樱花步道</div>
+        <div class="item-note">从酒店步行或乘一站电车可达。沿河两岸咖啡馆林立，不限季节皆美，樱花季更是梦幻。傍晚散步气氛极佳。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">18:30</div>
+        <div class="item-title">中目黑晚餐 🍽️ <span class="tag tag-food">首日美食</span></div>
+        <div class="item-note">东京最有情调的晚餐区域，小酒馆、网红餐厅云集。沿目黑川继续走至中目黑，享用抵达东京的第一顿晚餐，开启旅程。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><span>DAY TWO</span></div>
+
+  <!-- Day 2 -->
+  <div class="day-card" id="day2">
+    <div class="day-header">
+      <div class="day-number">2</div>
+      <div class="day-title-wrap">
+        <h2>浅草 · 国立博物馆 · 上野 · 有乐町购物</h2>
+        <div class="day-theme">CULTURE DAY · 千年古刹与博物之旅</div>
+      </div>
+      <div class="day-emoji">🛕</div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="item-time">10:00</div>
+        <div class="item-title">酒店出发</div>
+        <div class="item-note">酒店早餐后10点出发，乘都营浅草线约30分钟至浅草站。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">10:30</div>
+        <div class="item-title">雷门 · 仲见世商店街</div>
+        <div class="item-note">上午10点半人流相对可控，拍大红灯笼的最佳位置。仲见世品尝人形烧、草饼等传统小吃，顺道选购伴手礼。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">11:15</div>
+        <div class="item-title">浅草寺（Sensō-ji）</div>
+        <div class="item-note">东京最古老佛教寺院，参拜求签，感受千年古刹禅意。傍晚灯光亮起后值得再来一次。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">13:00</div>
+        <div class="item-title">前往上野 · 午餐</div>
+        <div class="item-note">步行约15分钟或乘地铁至上野，在博物馆周边或馆内餐厅享用午餐。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">14:00</div>
+        <div class="item-title">东京国立博物馆 <span class="tag tag-warn">⚠️ 周一休馆</span></div>
+        <div class="item-note">日本最大博物馆，门票¥1,000。入馆先领取免费中文导览图。建议提前在携程/大众点评预约中文拼团讲解（约2小时），可深度了解展品背后的故事。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">16:00</div>
+        <div class="item-title">上野公园 · 不忍池</div>
+        <div class="item-note">博物馆游览完后在上野公园散步，不忍池边休息片刻，感受东京最大城市公园的悠闲气氛。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">17:30</div>
+        <div class="item-title">有乐町 BicCamera + Loft 🛍️</div>
+        <div class="item-note">从上野乘JR山手线约15分钟直达。8层电器百货扫货，Loft步行5分钟可达。营业至22:00，傍晚购物黄金时段！别忘了出示护照办理免税。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><span>DAY THREE</span></div>
+
+  <!-- Day 3 -->
+  <div class="day-card" id="day3">
+    <div class="day-header">
+      <div class="day-number">3</div>
+      <div class="day-title-wrap">
+        <h2>美术馆 · 新宿御苑 · 涩谷十字路口</h2>
+        <div class="day-theme">ART & GARDEN DAY · 艺术与庭园之旅</div>
+      </div>
+      <div class="day-emoji">🎨</div>
+    </div>
+
+    <!-- Plan B box -->
+    <div class="planb-box">
+      <div class="planb-header">🎯 Plan A / Plan B · 二选一</div>
+      <div class="planb-options">
+        <div class="planb-option">
+          <div class="opt-badge opt-a">Plan A · 推荐</div>
+          <h4>根津美术馆</h4>
+          <p>收藏7,400+件日本及东亚艺术精品，含7件国宝。隈研吾设计建筑，附设精美日式庭园。⚠️ 周一休馆，¥1,300。无需提前购票，随时可去。</p>
+        </div>
+        <div class="planb-option">
+          <div class="opt-badge opt-b">Plan B · 抢到票再定</div>
+          <h4>吉卜力美术馆</h4>
+          <p>宫崎骏亲自设计，含独家原创动画放映、龙猫猫巴士等。⚠️ 周二休馆，¥1,000。<strong>须提前1-2个月网上抢票！</strong>14:00场次最顺路。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="item-time">10:00</div>
+        <div class="item-title">酒店出发</div>
+        <div class="item-note">乘地铁至表参道站（都营浅草线换乘，约25分钟）。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">10:30</div>
+        <div class="item-title">
+          根津美术馆 <span class="tag tag-alt">Plan A</span>
+          <span style="font-size:12px;color:var(--muted);font-weight:300">/ 新宿御苑上午场 <span class="tag tag-alt">Plan B</span></span>
+        </div>
+        <div class="item-note">
+          <strong>Plan A：</strong>根津美术馆（表参道步行5分钟），含庭园游览约1.5小时。<br>
+          <strong>Plan B：</strong>若吉卜力选14:00场，上午先去新宿御苑（¥500，⚠️周四休园），再赶去吉卜力。
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">12:30</div>
+        <div class="item-title">午餐 🍽️</div>
+        <div class="item-note">表参道/南青山一带咖啡馆餐厅密集，性价比与格调兼具，可按喜好选择。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">14:00</div>
+        <div class="item-title">
+          新宿御苑 <span class="tag tag-alt">Plan A</span>
+          <span style="font-size:12px;color:var(--muted);font-weight:300">/ 吉卜力美术馆 <span class="tag tag-alt">Plan B</span></span>
+          <span class="tag tag-warn">⚠️ 周四休园</span>
+        </div>
+        <div class="item-note">
+          <strong>Plan A：</strong>新宿御苑（地铁约15分钟），融合日式、英式、法式三种园林风格，东京最美综合庭园，¥500，17:00关门。<br>
+          <strong>Plan B：</strong>吉卜力美术馆14:00场（新宿→吉祥寺约15分钟），参观约1.5小时，之后游井之头公园+天鹅船。
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">16:30</div>
+        <div class="item-title">涩谷十字路口打卡 📸</div>
+        <div class="item-note">全球最繁忙斑马线，傍晚灯光全开后最为壮观！上楼到星巴克或涩谷Sky观景台俯瞰全景。Plan B若去了吉卜力，可调整至晚上7点前来，夜晚灯光反而更震撼。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><span>DAY FOUR</span></div>
+
+  <!-- Day 4 -->
+  <div class="day-card" id="day4">
+    <div class="day-header">
+      <div class="day-number">4</div>
+      <div class="day-title-wrap">
+        <h2>富士山深度游 · 入住温泉酒店</h2>
+        <div class="day-theme">FUJI DAY · 一山一湖一温泉</div>
+      </div>
+      <div class="day-emoji">🌄</div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="item-time">09:00</div>
+        <div class="item-title">东京自驾出发 🚗</div>
+        <div class="item-note">走中央自动车道，约2小时抵达河口湖大石公园一带。建议提前预订租车（五反田/新宿取还车）。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">11:00</div>
+        <div class="item-title">大石公园（Oishi Park）<span class="tag tag-tip">免费入园</span></div>
+        <div class="item-note">河口湖北岸正对富士山，「逆富士」倒影经典拍摄地。园内咖啡馆可享用午餐，必吃蓝莓冰淇淋！上午光线柔和，是拍富士山的最佳时段之一。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">13:00</div>
+        <div class="item-title">山中湖 SANSUI 骑行 🚴</div>
+        <div class="item-note">自驾约30分钟至山中湖。租电动自行车骑南岸精华路段约5-7km，富士山视野全程相伴，约1-1.5小时轻松完成。<strong>建议提前电话预约：0555-62-3146</strong>（¥1,500-2,000/人）。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">14:30</div>
+        <div class="item-title">山中湖天鹅游船 🦢</div>
+        <div class="item-note">骑行后顺路乘天鹅踏板船，边喂天鹅边欣赏富士山湖面倒影，是全程最浪漫的情侣活动。营业至16:30，14:30乘船时间充裕。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">16:00</div>
+        <div class="item-title">富士急乐园 🎢 <span class="tag tag-warn">⚠️ 热门项目早排队</span></div>
+        <div class="item-note">自驾约20分钟。约3小时可玩3-4个项目，优先冲：富士山过山车、FUJIYAMA、Takabisha。热门项目排队截止比闭园早1-2小时，一进园直奔目标！</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">19:00</div>
+        <div class="item-title">HOTEL MYSTAYS 富士山展望温泉 ♨️ <span class="tag tag-warn">提前2-3周预订</span></div>
+        <div class="item-note">步行5分钟从富士急乐园直达。7楼露天温泉正对富士山，泡汤看日落是整趟旅程最难忘的时刻。含富士山景观房极为抢手，务必提前预订！</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><span>DAY FIVE</span></div>
+
+  <!-- Day 5 -->
+  <div class="day-card" id="day5">
+    <div class="day-header">
+      <div class="day-number">5</div>
+      <div class="day-title-wrap">
+        <h2>河口湖晨游 · 御殿场 Premium Outlets</h2>
+        <div class="day-theme">SHOPPING DAY · 富士山脚下购物日</div>
+      </div>
+      <div class="day-emoji">🛍️</div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="item-time">08:30</div>
+        <div class="item-title">酒店早餐 · 大石公园清晨 📸</div>
+        <div class="item-note">享用酒店早餐后，自驾15分钟回大石公园。清晨光线最柔和，游客极少，是拍摄富士山倒影的绝佳时机，比昨天下午更美！</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">11:00</div>
+        <div class="item-title">出发御殿场 Premium Outlets 🚗</div>
+        <div class="item-note">自驾约40-50分钟。日本最大奥特莱斯，290+品牌分三区：东区（Nike/Adidas/Lego）、西区（GUCCI/PRADA/COACH）、Hill Side区。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">11:30</div>
+        <div class="item-title">御殿场奥莱购物 <span class="tag tag-tip">先领折扣券</span></div>
+        <div class="item-note">入场后<strong>第一件事：去旅游服务中心领取外国人专属折扣券</strong>，可在多个品牌使用。西区「梦之大桥」天气好时可拍到富士山为背景的绝美购物照！营业至20:00。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">17:00</div>
+        <div class="item-title">返回东京 🚗</div>
+        <div class="item-note">自驾约1.5小时返回东京五反田酒店，傍晚可在中目黑或下北泽享用晚餐。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><span>DAY SIX</span></div>
+
+  <!-- Day 6 -->
+  <div class="day-card" id="day6">
+    <div class="day-header">
+      <div class="day-number">6</div>
+      <div class="day-title-wrap">
+        <h2>筑地美食告别日 · 返程羽田</h2>
+        <div class="day-theme">FAREWELL DAY · 以美食作别东京</div>
+      </div>
+      <div class="day-emoji">🍣</div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="item-time">08:30</div>
+        <div class="item-title">酒店退房 · 行李寄存</div>
+        <div class="item-note">退房后将行李寄存酒店（一般可免费寄存至15:00），轻装出发筑地。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">09:00</div>
+        <div class="item-title">出发筑地场外市场</div>
+        <div class="item-note">从五反田乘<strong>都营浅草线</strong>约20分钟至东银座站，步行5分钟即达（¥220）。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">09:30</div>
+        <div class="item-title">筑地场外市场 · 美食扫荡 🍱 <span class="tag tag-food">必吃清单</span></div>
+        <div class="item-note">
+          🍣 各家立食寿司小摊（拖罗/海胆必点）<br>
+          🍤 天房天妇罗（现炸现吃，酥脆一绝）<br>
+          🥚 丸竹玉子烧（甜软热乎，¥200/串）<br>
+          🦪 扇贝/牡蛎/海胆烧烤串（边走边吃）<br>
+          🍦 抹茶冰淇淋收尾<br><br>
+          <span style="color:var(--red)">⚠️ 多数店铺12:00后陆续收摊，建议9:30前到场。多带现金！</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">13:00</div>
+        <div class="item-title">寿司处大和 · 正式午餐 <span class="tag tag-warn">建议提前预约</span></div>
+        <div class="item-note">坐下来享用最后一顿正式寿司午餐，人气极高，强烈建议提前网上预约。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">14:30</div>
+        <div class="item-title">返回酒店取行李</div>
+        <div class="item-note">从筑地乘都营浅草线约20分钟返回五反田取行李。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">15:00</div>
+        <div class="item-title">出发羽田机场 ✈️</div>
+        <div class="item-note">从五反田乘<strong>都营浅草线</strong>直达羽田国际航站楼，约30分钟（¥460），全程无需换乘。国际航班建议提前3小时到达机场。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">15:40</div>
+        <div class="item-title">羽田机场 · 办理值机</div>
+        <div class="item-note">充裕时间办理值机、安检、购买免税品。东京之旅圆满收官！</div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-time">17:20</div>
+        <div class="item-title">✈️ 起飞返程</div>
+        <div class="item-note">满载美好回忆，期待下次再来！</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips Section -->
+  <div class="tips-section">
+    <h3>⚡ 行程关键提示</h3>
+
+    <div class="tips-grid">
+      <div class="tip-item">
+        <h4>🎟️ 休馆日汇总</h4>
+        <div class="closure-grid" style="margin-top:8px">
+          <div class="closure-item"><span>东京国立博物馆</span><span>周一休馆</span></div>
+          <div class="closure-item"><span>根津美术馆</span><span>周一休馆</span></div>
+          <div class="closure-item"><span>新宿御苑</span><span>周四休园</span></div>
+          <div class="closure-item"><span>吉卜力美术馆</span><span>周二休馆</span></div>
+        </div>
+      </div>
+
+      <div class="tip-item">
+        <h4>🚇 交通攻略</h4>
+        <p>第1天：Suica刷羽田→五反田（¥460）<br>
+        第2-3天：激活<strong>48小时地铁券</strong>（¥1,200）覆盖两天，物超所值<br>
+        第4-5天：自驾，建议提前预订租车<br>
+        第6天：Suica刷筑地→羽田（¥680）</p>
+      </div>
+
+      <div class="tip-item">
+        <h4>🗓️ 提前预订清单</h4>
+        <p>☐ 租车（第4-5天，建议提前2周）<br>
+        ☐ HOTEL MYSTAYS温泉酒店（提前2-3周）<br>
+        ☐ 吉卜力美术馆票（每月10日9:00北京时间抢票）<br>
+        ☐ 山中湖SANSUI骑行：0555-62-3146<br>
+        ☐ 寿司处大和午餐预约</p>
+      </div>
+
+      <div class="tip-item">
+        <h4>🛍️ 购物退税</h4>
+        <p>单次消费满¥5,000即可办理免税。有乐町BicCamera、木更津奥莱、御殿场奥莱均可退税。御殿场奥莱另有<strong>外国人专属折扣券</strong>，入场必领！</p>
+      </div>
+
+      <div class="tip-item">
+        <h4>🌡️ 富士山注意事项</h4>
+        <p>山中湖骑行建议穿防风外套，湖边风大。富士急乐园热门项目排队截止比闭园早1-2小时，务必一进园就直奔目标。温泉酒店含富士山景观房极为抢手。</p>
+      </div>
+
+      <div class="tip-item">
+        <h4>💴 预算参考</h4>
+        <p>景点门票：约¥5,000-7,000/人<br>
+        交通（含地铁+羽田）：约¥3,000/人<br>
+        富士急一日通票：约¥6,000/人<br>
+        温泉酒店：约¥15,000-25,000/晚（双人）</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Intersection Observer for scroll animations
+  const cards = document.querySelectorAll('.day-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  cards.forEach(card => observer.observe(card));
+
+  // Smooth scroll for nav dots
+  document.querySelectorAll('.nav-dot').forEach(dot => {
+    dot.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(dot.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Highlight active nav dot on scroll
+  window.addEventListener('scroll', () => {
+    const days = ['day1','day2','day3','day4','day5','day6'];
+    days.forEach((id, i) => {
+      const el = document.getElementById(id);
+      const dot = document.querySelectorAll('.nav-dot')[i];
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom > 100) {
+          dot.style.opacity = '1';
+          dot.style.transform = 'scale(1.5)';
+        } else {
+          dot.style.opacity = '0.7';
+          dot.style.transform = 'scale(1)';
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>
